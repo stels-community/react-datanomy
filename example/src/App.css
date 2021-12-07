@@ -1,0 +1,19 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70px;
+  background-color: darkslateblue;
+  color: gold;
+}
+
+header > h1 {
+  margin-right: 20px;
+}
+
