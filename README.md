@@ -34,7 +34,7 @@ Datanomy receive **initialState**, **reducers** and optionally **scenarios** and
 
 **initialState** is a starting store state.
 
-**reducers** is a hash of clear functions, indexed by actions names, which receives one or two arguments:**currentState** and optional **payload** and returns **newState**.
+**reducers** is a hash of clear functions, indexed by actions names, which receives one or two arguments: **currentState** and optional **payload** and returns **newState**.
 
 **scenarios** is a function, which receive **getState** method and **actions** in arguments and returns a hash with **scripts**.
 
