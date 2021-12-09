@@ -1,4 +1,4 @@
-import { createDatanomy, TReducers, TScenarios } from "../../../."
+import { createDatanomy, TReducers, TScenarios } from "react-datanomy"
 
 export type TTodo = {
   id: string;
