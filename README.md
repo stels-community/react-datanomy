@@ -1,5 +1,5 @@
-![logo](https://user-images.githubusercontent.com/79456243/145360178-12110388-142d-45e0-9903-95463bb46038.png)
-# react-datanomy
+# <p><img style="vertical-align:middle;" align="left" alt="logo" src="https://user-images.githubusercontent.com/79456243/145360178-12110388-142d-45e0-9903-95463bb46038.png"> react-datanomy</p>
+
 ### Helper library for organize you state management, using native React.js features
 
 This is most clear way for manage state in React.js, with unnecessary of writing extra excess code, allowing to keep you attention on what you do, instead how
