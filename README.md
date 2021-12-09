@@ -23,6 +23,15 @@ yarn add react-datanomy
 ```
 ## API:
 
+Datanomy receive **initialState**, **reducers** and optionally **scenarios** and returns array with **Provider**, **Hook** and **Context**. **Provider** supply univwesal structure, named **SAS Bus**, and then **Hook**, **Context.Consumer**, or **contextType** consume it through React context in the next unified form:
+
+```js
+[currentState, actions, scripts]
+```
+
+**SAS Bus** (**SAS** from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, sewage system, etc. - to the any network, which independend from others and also paved through whole building. According to that analogy, React context play a cable duct role.
+
+
 **initialState** is a starting store state.
 
 **reducers** is a hash of clear functions, indexed by actions names, which receives one or two arguments:**currentState** and optional **payload** and returns **newState**.
@@ -35,7 +44,7 @@ yarn add react-datanomy
 
 **acrions** are methods, which formally wrappers for **dispatch**, returned from useReducer, called with action name in `type` field and optional **payload** from **action** argument.
 
-**scripts** are methods, which can receive optional **payload**, returns nothing. They are can be regular, async, generators, or async generators functions and contains a logic of any complexity, which alwais have an access to the current actual state by using **getState**, call anu actions, which scopped from **scenarios** method.
+**scripts** are methods, which can receive optional **payload**, returns nothing. They are can be regular, async functions and contains a logic of any complexity, which allwais have an access to the current actual state by using **getState**, and call any **actions**, which closured from **scenarios** method scope.
 
 Datanomy receive **initialState**, **reducers** and optionally **scenarios** and returns array with **Provider**, **Hook** and **Context**. **Provider** supply univwesal structure, named **SAS Bus**, and then **Hook**, **Context.Consumer**, or **contextType** consume it through React context in the next unified form:
 ```js
