@@ -22,23 +22,26 @@ or
 yarn add react-datanomy
 ```
 ## API:
-Datanomy receive **initialState**, **reducers** and optionally **scenarios** method and then provide unified structure, named **SAS Bus**, through context in the next form:
+Datanomy receive **initialState**, **reducers** and optionally **scenarios** method and returns array with **Provider**, **Hook** and **Context**. **Provider** supply univwesal structure, named **SAS Bus**, and **Hook**, **Context.Consumer**, or **contextType = Context** then consume it through React context in the next unified form:
 ```js
 [currentState, actions, scripts]
 ```
-**initialState** is a starting Store state, 
+**initialState** is a starting store state.
 
-**reducers** is a hash of clear functions, indexed by actions names, receive one or two arguments:**currentState** and optional **payload** and returns **newState**,
+**reducers** is a hash of clear functions, indexed by actions names, which receives one or two arguments:**currentState** and optional **payload** and returns **newState**.
 
-**scenarios** is a function, which receive **getState** and **actions** in arguments and return a hash with **scripts**,  
+**scenarios** is a function, which receive **getState** method and **actions** in arguments and return a hash with **scripts**.
 
-**currentState** is a state returned from useReducer inside **Datanomy**
+**getState** is a function, which alwais return cureent actual state.
 
-**acrions** are methods, which formally are wrappers for returned from useReducer dispatch, called with action name in type field and optional **payload** from **action** argument
+**currentState** is an current actual state, returned from useReducer inside **Datanomy**.
 
-**scripts** are methods, which can receive optional **payload**, returns nothing and can be regular, async, generators, or async generators
+**acrions** are methods, which formally are wrappers for returned from useReducer dispatch, called with action name in `type` field and optional **payload** from **action** argument.
 
-**SAS Bus** (SAS from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, sewage system - to the any network, which independend from others and also paved through whole building
+**scripts** are methods, which can receive optional **payload**, returns nothing and can be regular, async, generators, or async generators.
+
+**SAS Bus** (SAS from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, sewage system - to the any network, which independend from others and also paved through whole building.
+
 ## Usage:
 
 ### 1. Create you store module:
