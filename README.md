@@ -23,7 +23,7 @@ yarn add react-datanomy
 ```
 ## API:
 
-Datanomy receive **initialState**, **reducers** and optionally **scenarios** and returns array with **Provider**, **Hook** and **Context**. **Provider** supply univwesal structure, named **SAS Bus**, and then **Hook**, **Context.Consumer**, or **contextType** consume it through React context in the next unified form:
+Datanomy receive **initialState**, **reducers** and optionally **scenarios** and returns array with **Provider**, **Hook** and **Context**. **Provider** supply universal structure, named **SAS Bus**, and then **Hook**, **Context.Consumer**, or **contextType** consume it through React context in the next unified form:
 
 ```js
 [currentState, actions, scripts]
