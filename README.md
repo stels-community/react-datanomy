@@ -23,14 +23,13 @@ yarn add react-datanomy
 ```
 ## API:
 
-Datanomy receive **initialState**, **reducers** and optionally **scenarios** and returns array with **Provider**, **Hook** and **Context**. **Provider** supply universal structure, named **SAS Bus**, and then **Hook**, **Context.Consumer**, or **contextType** consume it through React context in the next unified form:
+Datanomy receive **initialState**, **reducers** and optionally **scenarios** and returns array with **StoreProvider**, **StoreHook** and **StoreContext**. **StoreProvider** supply universal structure, named **SAS Bus**, and then **StoreHook**, **StoreContext.Consumer**, or **contextType** via **StoreContext**, consume it in the next unified form:
 
 ```js
-[currentState, actions, scripts]
+[currentState, memoizedActions, memoizedScripts]
 ```
 
 **SAS Bus** (**SAS** from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, sewage system, etc. - to the any network, which independend from others and also paved through whole building. According to that analogy, React context play a cable duct role.
-
 
 **initialState** is a starting store state.
 
@@ -38,13 +37,19 @@ Datanomy receive **initialState**, **reducers** and optionally **scenarios** and
 
 **scenarios** is a function, which receive **getState** method and **actions** in arguments and returns a hash with **scripts**.
 
-**getState** is a function, which allways return cureent actual state.
+**getState** is a function, which allways return cureent actual state inside **scripts**
 
 **currentState** is an current actual state, returned from useReducer inside **Datanomy**.
 
-**acrions** are methods, which formally wrappers for **dispatch**, returned from useReducer, called with action name in `type` field and optional **payload** from **action** argument.
+**acrions** is a memoized hash of methods, which formally wrappers for **dispatch**, returned from useReducer, called with action name in `type` field and optional **payload** from **action** argument.
 
-**scripts** are methods, which can receive optional **payload**, returns nothing. They are can be regular, async functions and contains a logic of any complexity, which allways have an access to the current actual state by using **getState**, and call any **actions**, which closured from **scenarios** method scope.
+**scripts** is a  memoized hash of methods, which can receives optional **payload** and returns nothing. They are can be regular, or async functions, and contains a logic of any complexity, which allways have an access to the current actual state by using **getState**, and call any **actions**, which are closured from **scenarios** method scope.
+
+**StoreProvider** is component, which wrap React Context.Provider and supply SAS Bus to his value argument
+
+**StoreHook** is a wrapper for a regular React useContext, with **StoreContext** as argument
+
+**StoreContext** is a regular React Context, created using createContext, called with **initialState** as argument
 
 ## Usage:
 
