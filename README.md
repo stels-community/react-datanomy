@@ -46,13 +46,6 @@ Datanomy receive **initialState**, **reducers** and optionally **scenarios** and
 
 **scripts** are methods, which can receive optional **payload**, returns nothing. They are can be regular, async functions and contains a logic of any complexity, which allwais have an access to the current actual state by using **getState**, and call any **actions**, which closured from **scenarios** method scope.
 
-Datanomy receive **initialState**, **reducers** and optionally **scenarios** and returns array with **Provider**, **Hook** and **Context**. **Provider** supply univwesal structure, named **SAS Bus**, and then **Hook**, **Context.Consumer**, or **contextType** consume it through React context in the next unified form:
-```js
-[currentState, actions, scripts]
-```
-
-**SAS Bus** (SAS from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, sewage system, etc. - to the any network, which independend from others and also paved through whole building. According to that analogy, React context play a cable duct role.
-
 ## Usage:
 
 ### 1. Create you store module:
