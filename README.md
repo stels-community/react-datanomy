@@ -38,13 +38,13 @@ Datanomy receive **initialState**, **reducers** and optionally **scenarios** and
 
 **scenarios** is a function, which receive **getState** method and **actions** in arguments and returns a hash with **scripts**.
 
-**getState** is a function, which alwais return cureent actual state.
+**getState** is a function, which allways return cureent actual state.
 
 **currentState** is an current actual state, returned from useReducer inside **Datanomy**.
 
 **acrions** are methods, which formally wrappers for **dispatch**, returned from useReducer, called with action name in `type` field and optional **payload** from **action** argument.
 
-**scripts** are methods, which can receive optional **payload**, returns nothing. They are can be regular, async functions and contains a logic of any complexity, which allwais have an access to the current actual state by using **getState**, and call any **actions**, which closured from **scenarios** method scope.
+**scripts** are methods, which can receive optional **payload**, returns nothing. They are can be regular, async functions and contains a logic of any complexity, which allways have an access to the current actual state by using **getState**, and call any **actions**, which closured from **scenarios** method scope.
 
 ## Usage:
 
