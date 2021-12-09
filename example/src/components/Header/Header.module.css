@@ -1,0 +1,11 @@
+.button {
+  cursor: pointer;
+  user-select: none;
+  margin: 4px;
+  padding: 0 14px;
+  border: orangered solid 1px;
+}
+
+.button:hover {
+  border-color: gold;
+}

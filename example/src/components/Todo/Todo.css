@@ -1,0 +1,11 @@
+.complete {
+  text-decoration: line-through;
+}
+
+.delete-todo {
+  cursor: pointer;
+}
+
+.delete-todo, .complete-todo {
+  margin-right: 10px;
+}

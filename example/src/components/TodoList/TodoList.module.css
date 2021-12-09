@@ -1,0 +1,33 @@
+.todoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.todoList {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.todoButtons {
+  display: flex;
+}
+
+.button {
+  margin: 0 10px;
+  padding-bottom: 4px;
+  cursor: pointer;
+  width: 120px;
+  background-color: firebrick;
+  color: gold;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.button:hover {
+  background-color: orangered;
+  color: bisque;
+}
