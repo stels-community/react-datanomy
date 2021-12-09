@@ -21,11 +21,29 @@ or
 ```
 yarn add react-datanomy
 ```
+## API:
+Datanomy receive **initialState**, **reducers** and optionally **scenarios** method and then provide unified structure, named **SAS Bus**, through context in the next form:
+```js
+[currentState, actions, scripts]
+```
+**initialState** is a starting Store state, 
 
+**reducers** is a hash of clear functions, indexed by actions names, receive one or two arguments:**currentState** and optional **payload** and returns **newState**,
+
+**scenarios** is a function, which receive **getState** and **actions** in arguments and return a hash with **scripts**,  
+
+**currentState** is a state returned from useReducer inside **Datanomy**
+
+**acrions** are methods, which formally are wrappers for returned from useReducer dispatch, called with action name in type field and optional **payload** from **action** argument
+
+**scripts** are methods, which can receive optional **payload**, returns nothing and can be regular, async, generators, or async generators
+
+**SAS Bus** (SAS from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, sewage system - to the any network, which independend from others and also paved through whole building
 ## Usage:
 
 ### 1. Create you store module:
 
+`file: src/stores/counterStore.js`
 ```js
 // Import createDatanomy from react-datanomy:
 import { createDatanomy } from 'react-datanomy'
@@ -105,12 +123,53 @@ export const [
   CounterProvider, 
   useCounter,
   CounterContext
-// Probide store interface as generic argument to hte createDatanomy
+// Probide store interface as generic argument to the createDatanomy
 ] = createDatanomy<TCounterStore>(initialState, reducers, scenarios)
 ```
 
-### 2. Import and connect You store provider to the DOM branch
-// TODO: Complete readme
+### 2. Import and connect You store provider to the DOM branch, or whole app
+`file: src/App.jsx`
 ```js
+import { CounterProvider } from './store/counterStore'
+import HookComponent from './components/HookComponent'
+import ConsumerComponent from './components/ConsumerComponent'
+import ClassComponent from './components/ClassComponent'
+import './App.css';
 
+function App() {
+  return (
+    <CounterProvider>
+      <div className="App">
+        <HookComponent/>
+        <ConsumerComponent/>
+        <ClassComponent/>
+      </div>
+    </CounterProvider>
+  );
+}
+
+export default App;
 ```
+### 3. Connect to the Store using hook in functional component:
+`file: src/components/HookComponent.jsx`
+```js
+import { useCounter } from '../store/counterStore'
+
+function HookComponent() {
+  const [{
+    counter
+  }, {
+    increment, decrement
+  }, {
+    derivedAdd
+  }] = useCounter()
+  return (
+    <div>
+      {/* TODO: Complete readme*/}
+    </div>
+  );
+}
+
+export default HookComponent;
+```
+// TODO: Complete readme
