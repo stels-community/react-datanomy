@@ -6,7 +6,7 @@ This is most clear way for manage state in React.js, with unnecessary of writing
 
 #### Preferencies:
 
-1. Super small - 870 bytes ungzipped!
+1. Super small: 870 bytes ungzipped!
 2. Support both, class and functional components
 3. Provide uniform bus, used universally throught all you components tree
 4. Without side dependencies - only React enough
