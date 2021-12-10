@@ -276,6 +276,7 @@ class ClassComponent extends PureComponent {
 
 export default ClassComponent;
 ```
+## Tips and tricks
 
 
 // TODO: Complete readme
