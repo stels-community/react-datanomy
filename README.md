@@ -29,7 +29,7 @@ Datanomy receive **initialState**, **reducers** and optionally **scenarios** and
 [currentState, memoizedActions, memoizedScripts]
 ```
 
-**SAS Bus** (**SAS** from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, sewage system, etc. - to the any network, which independend from others and also paved through whole building. According to that analogy, React context play a cable duct role.
+**SAS Bus** (**SAS** from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, etc. - to the any network, which independend from others and also paved through whole building. According to that analogy, React context play a cable duct role.
 
 **initialState** is a starting store state.
 
