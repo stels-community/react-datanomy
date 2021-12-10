@@ -248,7 +248,7 @@ class ConsumerClassComponent extends PureComponent {
 
 export default ConsumerClassComponent;
 ```
-### 4. Connect to the Store using contextType in the class components:
+### 5. Connect to the Store using contextType in the class components:
 `file: src/components/ClassComponent.jsx`
 ```js
 import { PureComponent } from 'react'
