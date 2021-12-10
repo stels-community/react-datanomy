@@ -146,12 +146,11 @@ import { CounterProvider } from './store/counterStore'
 import HookComponent from './components/HookComponent'
 import ConsumerComponent from './components/ConsumerComponent'
 import ClassComponent from './components/ClassComponent'
-import './App.css';
 
 function App() {
   return (
     <CounterProvider>
-      <div className="App">
+      <div>
         <HookComponent/>
         <ConsumerComponent/>
         <ClassComponent/>
@@ -162,26 +161,121 @@ function App() {
 
 export default App;
 ```
-### 3. Connect to the Store using hook in functional component:
+### 3. Connect to the Store using hook in functional components:
 `file: src/components/HookComponent.jsx`
 ```js
+import { useEffect } from 'react'
 import { useCounter } from '../store/counterStore'
 
 function HookComponent() {
-  const [{
-    counter
-  }, {
-    increment, decrement
-  }, {
-    derivedAdd
-  }] = useCounter()
+  
+  // here we are just use a destructurization instead somethig like selectors in Redux, 
+  // so, when unused store branches will be updated, they will not trigger a rendering 
+  const [
+    { counter }, 
+    { increment, decrement }, 
+    { derivedAdd },
+  ] = useCounter()
+  
+  useEffect(() => {
+    derivedAdd(15)
+    
+    // we can use actions and scripts as useEffect, useMemo, or useCallback
+    // dependency for avoid exhausive deps warning. This will not trigger 
+    // unwanted rerenderings, because actions and scripts are already memoized
+    // without any dependencies
+  }, [derivedAdd])
+  
   return (
     <div>
-      {/* TODO: Complete readme*/}
+      <div>{counter}</div>
+      <buttom onClick={increment}>+</button>
+      <buttom onClick={decrement}>-</button>
     </div>
   );
 }
 
 export default HookComponent;
 ```
+### 4. Connect to the Store using Context.Consumer in functional, or class components:
+`file: src/components/ConsumerComponent.jsx`
+```js
+import { CounterContext } from '../store/counterStore'
+
+function ConsumerComponent() {
+  return (
+    <CounterContext.Consumer>
+      {/* in SAS Bus we can even skip state, actions, or scripts - just 
+          do not forget to preserve a coma */}
+      {([
+        , // <- skip unused state...
+        { add, sub }, // <- and skip unused scripts
+      ]) => (
+        <>
+          <buttom onClick={() => add(5)}>+5</button>
+          <buttom onClick={() => sub(5)}>-5</button>
+        </>
+      )}
+    </CounterContext.Consumer>
+  );
+}
+
+export default ConsumerComponent;
+```
+#### The same as a class component
+`file: src/components/ConsumerClassComponent.jsx`
+```js
+import { PureComponent } from 'react'
+import { CounterContext } from '../store/counterStore'
+
+class ConsumerClassComponent extends PureComponent {
+  render() {
+    return (
+      <CounterContext.Consumer>
+        {([
+          , 
+          { add, sub }, 
+        ]) => (
+          <>
+            <buttom onClick={() => add(5)}>+5</button>
+            <buttom onClick={() => sub(5)}>-5</button>
+          </>
+        )}
+      </CounterContext.Consumer>
+    );
+  }
+}
+
+export default ConsumerClassComponent;
+```
+### 4. Connect to the Store using contextType in the class components:
+`file: src/components/ClassComponent.jsx`
+```js
+import { PureComponent } from 'react'
+import { CounterContext } from '../store/counterStore'
+
+class ClassComponent extends PureComponent {
+  
+  static contextType = CounterContext;
+
+  render() {
+    
+    const [
+      ,
+      { add, sub },
+    ] = this.context
+  
+    return (
+      <>
+        <buttom onClick={() => add(10)}>+10</button>
+        <buttom onClick={() => sub(10)}>-10</button>
+      </>
+    );
+  }
+}
+
+export default ClassComponent;
+```
+
+
 // TODO: Complete readme
