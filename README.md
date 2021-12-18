@@ -278,5 +278,19 @@ export default ClassComponent;
 ```
 ## Tips and tricks
 
+### About Single Source of Truth (SST)
+
+Good news: SST is splitable!
+
+It is not necessary to create one monolithic store for whole application data. When you split one big store on several specialized stores, if you follow condition of avoiding data duplicates, you several stories yet remains as splitted SST. 
+
+For example, you can wrap different routes into providers, which connect Store, related only to relevant route, or DOM branch (such as `<AdminProvider>` to `/admin` route). A lot of discussions about providers location in a DOM tree happens in the internet, so it is a thin quiestion, but sometime it have a sense.
+
+### getState function
+
+In the scenarios, function `getState` always returns actual state, so if you call it, than call action, which update some field and than again call `getState`, that field will contains a new value
+
+In that issue is opened discussion about scenarios API
+
 
 // TODO: Complete readme
