@@ -290,7 +290,17 @@ For example, you can wrap different routes into providers, which connect Store, 
 
 In the scenarios, function `getState` always returns actual state, so if you call it, than call action, which update some field and than again call `getState`, that field will contains a new value
 
-In that issue is opened discussion about scenarios API
+By the way, you can participate in discussions about [scenarios API](https://github.com/stels-community/react-datanomy/discussions/3) and [scenarios architecture](https://github.com/stels-community/react-datanomy/discussions/5)
 
+## How to contribute:
+
+Plwase read the [contribution guide](CONTRIBUTING.md) for participate in a project development
+
+Or support us by donation, if you interesting in speedup of evolving a simplest, compact and fastest React state management
+
+Ethereum wallet: 
+```
+0xc6C5673fa62F85070657F147246c167887Fc918D
+```
 
 // TODO: Complete readme
