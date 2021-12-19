@@ -23,35 +23,33 @@ yarn add react-datanomy
 ```
 ## API:
 
-Datanomy receive **initialState**, **reducers** and optionally **scenarios** and returns array with **Provider**, **Hook** and **Context**. **Provider** supply univwesal structure, named **SAS Bus**, and then **Hook**, **Context.Consumer**, or **contextType** consume it through React context in the next unified form:
+Datanomy receive **initialState**, **reducers** and optionally **scenarios** and returns array with **StoreProvider**, **StoreHook** and **StoreContext**. **StoreProvider** supply universal structure, named **SAS Bus**, and then **StoreHook**, **StoreContext.Consumer**, or **contextType** via **StoreContext**, consume it in the next unified form:
 
 ```js
-[currentState, actions, scripts]
+[currentState, memoizedActions, memoizedScripts]
 ```
 
-**SAS Bus** (**SAS** from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, sewage system, etc. - to the any network, which independend from others and also paved through whole building. According to that analogy, React context play a cable duct role.
-
+**SAS Bus** (**SAS** from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, etc. - to the any network, which independend from others and also paved through whole building. According to that analogy, React context play a cable duct role.
 
 **initialState** is a starting store state.
 
-**reducers** is a hash of clear functions, indexed by actions names, which receives one or two arguments:**currentState** and optional **payload** and returns **newState**.
+**reducers** is a hash of clear functions, indexed by actions names, which receives one or two arguments: **currentState** and optional **payload** and returns **newState**.
 
 **scenarios** is a function, which receive **getState** method and **actions** in arguments and returns a hash with **scripts**.
 
-**getState** is a function, which alwais return cureent actual state.
+**getState** is a function, which allways return cureent actual state inside **scripts**
 
 **currentState** is an current actual state, returned from useReducer inside **Datanomy**.
 
-**acrions** are methods, which formally wrappers for **dispatch**, returned from useReducer, called with action name in `type` field and optional **payload** from **action** argument.
+**acrions** is a memoized hash of methods, which formally wrappers for **dispatch**, returned from useReducer, called with action name in `type` field and optional **payload** from **action** argument.
 
-**scripts** are methods, which can receive optional **payload**, returns nothing. They are can be regular, async functions and contains a logic of any complexity, which allwais have an access to the current actual state by using **getState**, and call any **actions**, which closured from **scenarios** method scope.
+**scripts** is a  memoized hash of methods, which can receives optional **payload** and returns nothing. They are can be regular, or async functions, and contains a logic of any complexity, which allways have an access to the current actual state by using **getState**, and call any **actions**, which are closured from **scenarios** method scope.
 
-Datanomy receive **initialState**, **reducers** and optionally **scenarios** and returns array with **Provider**, **Hook** and **Context**. **Provider** supply univwesal structure, named **SAS Bus**, and then **Hook**, **Context.Consumer**, or **contextType** consume it through React context in the next unified form:
-```js
-[currentState, actions, scripts]
-```
+**StoreProvider** is component, which wrap React Context.Provider and supply SAS Bus to his value argument
 
-**SAS Bus** (SAS from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, sewage system, etc. - to the any network, which independend from others and also paved through whole building. According to that analogy, React context play a cable duct role.
+**StoreHook** is a wrapper for a regular React useContext, with **StoreContext** as argument
+
+**StoreContext** is a regular React Context, created using createContext, called with **initialState** as argument
 
 ## Usage:
 
@@ -148,12 +146,11 @@ import { CounterProvider } from './store/counterStore'
 import HookComponent from './components/HookComponent'
 import ConsumerComponent from './components/ConsumerComponent'
 import ClassComponent from './components/ClassComponent'
-import './App.css';
 
 function App() {
   return (
     <CounterProvider>
-      <div className="App">
+      <div>
         <HookComponent/>
         <ConsumerComponent/>
         <ClassComponent/>
@@ -164,26 +161,146 @@ function App() {
 
 export default App;
 ```
-### 3. Connect to the Store using hook in functional component:
+### 3. Connect to the Store using hook in functional components:
 `file: src/components/HookComponent.jsx`
 ```js
+import { useEffect } from 'react'
 import { useCounter } from '../store/counterStore'
 
 function HookComponent() {
-  const [{
-    counter
-  }, {
-    increment, decrement
-  }, {
-    derivedAdd
-  }] = useCounter()
+  
+  // here we are just use a destructurization instead somethig like selectors in Redux, 
+  // so, when unused store branches will be updated, they will not trigger a rendering 
+  const [
+    { counter }, 
+    { increment, decrement }, 
+    { derivedAdd },
+  ] = useCounter()
+  
+  useEffect(() => {
+    derivedAdd(15)
+    
+    // we can use actions and scripts as useEffect, useMemo, or useCallback
+    // dependency for avoid exhausive deps warning. This will not trigger 
+    // unwanted rerenderings, because actions and scripts are already memoized
+    // without any dependencies
+  }, [derivedAdd])
+  
   return (
     <div>
-      {/* TODO: Complete readme*/}
+      <div>{counter}</div>
+      <buttom onClick={increment}>+</button>
+      <buttom onClick={decrement}>-</button>
     </div>
   );
 }
 
 export default HookComponent;
 ```
+### 4. Connect to the Store using Context.Consumer in functional, or class components:
+`file: src/components/ConsumerComponent.jsx`
+```js
+import { CounterContext } from '../store/counterStore'
+
+function ConsumerComponent() {
+  return (
+    <CounterContext.Consumer>
+      {/* in SAS Bus we can even skip state, actions, or scripts - just 
+          do not forget to preserve a coma */}
+      {([
+        , // <- skip unused state...
+        { add, sub }, // <- and skip unused scripts
+      ]) => (
+        <>
+          <buttom onClick={() => add(5)}>+5</button>
+          <buttom onClick={() => sub(5)}>-5</button>
+        </>
+      )}
+    </CounterContext.Consumer>
+  );
+}
+
+export default ConsumerComponent;
+```
+#### The same as a class component
+`file: src/components/ConsumerClassComponent.jsx`
+```js
+import { PureComponent } from 'react'
+import { CounterContext } from '../store/counterStore'
+
+class ConsumerClassComponent extends PureComponent {
+  render() {
+    return (
+      <CounterContext.Consumer>
+        {([
+          , 
+          { add, sub }, 
+        ]) => (
+          <>
+            <buttom onClick={() => add(5)}>+5</button>
+            <buttom onClick={() => sub(5)}>-5</button>
+          </>
+        )}
+      </CounterContext.Consumer>
+    );
+  }
+}
+
+export default ConsumerClassComponent;
+```
+### 5. Connect to the Store using contextType in the class components:
+`file: src/components/ClassComponent.jsx`
+```js
+import { PureComponent } from 'react'
+import { CounterContext } from '../store/counterStore'
+
+class ClassComponent extends PureComponent {
+  
+  static contextType = CounterContext;
+
+  render() {
+    
+    const [
+      ,
+      { add, sub },
+    ] = this.context
+  
+    return (
+      <>
+        <buttom onClick={() => add(10)}>+10</button>
+        <buttom onClick={() => sub(10)}>-10</button>
+      </>
+    );
+  }
+}
+
+export default ClassComponent;
+```
+## Tips and tricks
+
+### About Single Source of Truth (SST)
+
+Good news: SST is splitable!
+
+It is not necessary to create one monolithic store for whole application data. When you split one big store on several specialized stores, if you follow condition of avoiding data duplicates, you several stories yet remains as splitted SST. 
+
+For example, you can wrap different routes into providers, which connect Store, related only to relevant route, or DOM branch (such as `<AdminProvider>` to `/admin` route). A lot of discussions about providers location in a DOM tree happens in the internet, so it is a thin quiestion, but sometime it have a sense.
+
+### getState function
+
+In the scenarios, function `getState` always returns actual state, so if you call it, than call action, which update some field and than again call `getState`, that field will contains a new value
+
+By the way, you can participate in discussions about [scenarios API](https://github.com/stels-community/react-datanomy/discussions/3) and [scenarios architecture](https://github.com/stels-community/react-datanomy/discussions/5)
+
+## How to contribute:
+
+Plwase read the [contribution guide](CONTRIBUTING.md) for participate in a project development
+
+Or support us by donation, if you interesting in speedup of evolving a simplest, compact and fastest React state management
+
+Ethereum wallet: 
+```
+0xc6C5673fa62F85070657F147246c167887Fc918D
+```
+
 // TODO: Complete readme
