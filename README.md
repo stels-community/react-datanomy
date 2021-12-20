@@ -1,4 +1,4 @@
-<p align="center"><img alt="logo" src="https://user-images.githubusercontent.com/79456243/145360178-12110388-142d-45e0-9903-95463bb46038.png"></p>
+<img alt="logo" width="100" src="https://user-images.githubusercontent.com/79456243/145360178-12110388-142d-45e0-9903-95463bb46038.png">
 
 # react-datanomy
 
