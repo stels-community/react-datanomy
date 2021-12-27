@@ -10,7 +10,7 @@ In general, the stels community is an association of people for whom freedom can
 
 For participate in react-datanomy development, just fork that project into you repository.
 
-You can organize a branches of you repository as you want, even just a commit you changes in the main branch, but all pull request should be created to the `development` branch of [stels-community/react-datanomy](https://github.com/stels-community/react-datanomy/tree/development) repo
+You can organize a branches of you repository as you want, even just a commit you changes in the main branch, but all pull request should be created to the `development` branch of [stels-community/react-datanomy](https://github.com/stels-community/react-datanomy/tree/development) repo (Note: Please, await until all workflow actions are completed before creating PR)
 
 Feel free to participate in our [discussions](https://github.com/stels-community/react-datanomy/discussions) and creating or commenting [issues](https://github.com/stels-community/react-datanomy/issues)
 
