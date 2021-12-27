@@ -1,8 +1,12 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stels-community/react-datanomy"
+  },
   "files": [
     "dist",
     "src"
@@ -34,7 +38,10 @@
     "trailingComma": "es5"
   },
   "name": "react-datanomy",
-  "author": "Eugeny Architector",
+  "author": "Eugeny Agafonov",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "module": "dist/react-datanomy.esm.js",
   "size-limit": [
     {

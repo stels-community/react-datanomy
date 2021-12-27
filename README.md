@@ -1,4 +1,8 @@
-# <p><img style="vertical-align:middle;" align="left" alt="logo" src="https://user-images.githubusercontent.com/79456243/145360178-12110388-142d-45e0-9903-95463bb46038.png"> react-datanomy</p>
+<img alt="logo" width="100" src="https://user-images.githubusercontent.com/79456243/145360178-12110388-142d-45e0-9903-95463bb46038.png">
+
+# react-datanomy
+
+[![Test and build](https://github.com/stels-community/react-datanomy/actions/workflows/main.yml/badge.svg)](https://github.com/stels-community/react-datanomy/actions/workflows/main.yml)
 
 [![Test and build](https://github.com/fiberliber/react-datanomy/actions/workflows/main.yml/badge.svg)](https://github.com/fiberliber/react-datanomy/actions/workflows/main.yml)
 
