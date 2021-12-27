@@ -2,9 +2,9 @@
 
 # react-datanomy
 
-[![Test and build](https://github.com/stels-community/react-datanomy/actions/workflows/main.yml/badge.svg)](https://github.com/stels-community/react-datanomy/actions/workflows/main.yml)
-
 ### Helper library for organize you state management, using native React.js features
+
+[![Test and build](https://github.com/stels-community/react-datanomy/actions/workflows/main.yml/badge.svg)](https://github.com/stels-community/react-datanomy/actions/workflows/main.yml)
 
 This is most clear way for manage state in React.js, with unnecessary of writing extra excess code, allowing to keep you attention on what you do, instead how
 
