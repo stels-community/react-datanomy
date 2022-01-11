@@ -2,7 +2,7 @@
 
 # react-datanomy
 
-### Helper library for organize you state management, using native React.js features
+### This is not a yet another state manager. This is just a helper library for organize you state management, using features, already present in the React.
 
 [![Test and build](https://github.com/stels-community/react-datanomy/actions/workflows/main.yml/badge.svg)](https://github.com/stels-community/react-datanomy/actions/workflows/main.yml)
 
