@@ -10,7 +10,7 @@ This is most clear way for manage state in React.js, with unnecessary of writing
 
 #### Preferencies:
 
-1. Super small: 991 bytes ungzipped!
+1. Super small: 998 bytes ungzipped!
 2. Support both, class and functional components
 3. Provide uniform bus, used universally throught all you components tree
 4. Without side dependencies - only React enough
@@ -39,7 +39,7 @@ Datanomy receive **initialState**, **reducers** and optionally **scenarios** and
 
 **reducers** is a hash of clear functions, indexed by actions names, which receives one or two arguments: **currentState** and optional **payload** and returns **newState**.
 
-**scenarios** is a hash of functions, which are receive **getState** method, **actions** and **payload** in arguments/ That hash transforms to the hash of **scripts**, each from which receive only **payload** when called.
+**scenarios** is a hash of functions, which are receive **getState** method, **actions** and **payload** in arguments. That hash transforms to the hash of **scripts**, each from which receive only **payload** when called.
 
 **bulk scenarios** is a function, which receive **getState** method and **actions** in arguments and returns a hash with **scripts**.
 
@@ -81,7 +81,7 @@ const reducers = {
   reset: (state) => ({ ...state, counter: 0 }),
 }
 
-// Optionally declare some complex scenarios:
+// Optionally declare some complex scenarios...
 const scenarios = {
   derivedAdd: async (getState, actions, payload) => {
     console.log(getState().counter) // for example 10
@@ -92,16 +92,16 @@ const scenarios = {
   }
 }
 
-// or declare bulk scenarios
-const bulkScenarios = (getState, actions) => ({
-  derivedAdd: async (payload) => {
-    console.log(getState().counter) // for example 10
-    await new Promise((resolve) => {
-      setTimeout(() => resolve(acttions.add(payload)), 100)
-    })
-    console.log(getState().counter) // 10 + payload
-  },
-})
+// ...or declare bulk scenarios
+// const bulkScenarios = (getState, actions) => ({
+//   derivedAdd: async (payload) => {
+//     console.log(getState().counter) // for example 10
+//     await new Promise((resolve) => {
+//       setTimeout(() => resolve(acttions.add(payload)), 100)
+//     })
+//     console.log(getState().counter) // 10 + payload
+//   },
+// })
 
 // Call createDatanomy with above declarations and export it retuns:
 export const [ 
@@ -114,7 +114,7 @@ export const [
 #### Same, using typescript:
 ```tsx
 // Additionally import Treducers and TScenarios types:
-import { TReducers, TBulkScenarios, createDatanomy } from 'react-datanomy';
+import { TReducers, TScenarios, TBulkScenarios, createDatanomy } from 'react-datanomy';
  
 // Declare you store interface
 interface TCounterStore = {
@@ -128,7 +128,7 @@ const initialState: TCounterStore = {
   someData: [],
 };
 
-// Type reducers, using TReducers with store interface as generic argument
+// Type reducers, using TReducers with store interface as generic argument.
 const reducers: TReducers<TCounterStore> = {
   increment: (state) => ({ ...state, counter: state.counter + 1 }),
   decrement: (state) => ({ ...state, counter: state.counter - 1 }),
@@ -137,23 +137,34 @@ const reducers: TReducers<TCounterStore> = {
   reset: (state) => ({ ...state, counter: 0 }),
 };
 
-// Type scenarios, using TScenarios with store interface as generic argument
-const bulkScenarios: TBulkScenarios<TCounterStore> = (getState, actions) => ({
-  derivedAdd: async (payload) => {
+// Type scenarios, using TScenarios with store interface as generic argument...
+const scenarios: TScenarios<TCounterStore> = {
+  derivedAdd: async (getState, actions, payload) => {
     console.log(getState().counter) // for example 10
     await new Promise((resolve) => {
       setTimeout(() => resolve(acttions.add(payload)), 100)
     })
     console.log(getState().counter) // 10 + payload
   },
-});
+};
+
+// ...or declare bulk scenarios
+// const bulkScenarios: TBulkScenarios<TCounterStore> = (getState, actions) => ({
+//   derivedAdd: async (payload) => {
+//     console.log(getState().counter) // for example 10
+//     await new Promise((resolve) => {
+//       setTimeout(() => resolve(acttions.add(payload)), 100)
+//     })
+//     console.log(getState().counter) // 10 + payload
+//   },
+// });
 
 export const [ 
   CounterProvider, 
   useCounter,
   CounterContext
 // Probide store interface as generic argument to the createDatanomy
-] = createDatanomy<TCounterStore>(initialState, reducers, bulkScenarios)
+] = createDatanomy<TCounterStore>(initialState, reducers, scenarios /*or bulkScenarios*/)
 ```
 
 ### 2. Import and connect You store provider to the DOM branch, or whole app
@@ -315,9 +326,20 @@ Plwase read the [contribution guide](CONTRIBUTING.md) for participate in a proje
 
 Or support us by donation, if you interesting in speedup of evolving a simplest, compact and fastest React state management
 
-Ethereum wallet: 
+Bitcoin:
+```
+bc1q2g3drds728hmmrjsgdu6cm7xkclur277gva7qz
+```
+Ethereum: 
 ```
 0xc6C5673fa62F85070657F147246c167887Fc918D
 ```
+Tron:
+```
+TKYjNtNR1Q9ZdgAA4d1TS5fMqBirM2attx
+```
+Everscale:
+```
+0:e26ebff8531f32de150074de9e7e83afa7aeeb2c8b16d0528d104758dfde31f2
+```
 
-// TODO: Complete readme

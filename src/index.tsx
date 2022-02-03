@@ -56,9 +56,7 @@ export function useDatanomy<TState>(
     : typeof scenarios === 'object'
       ? useMemo(() => Object.keys(scenarios).reduce(
           (scripts: TScripts, type): TScripts => (
-            scripts[type] = (payload: any) => {
-              scenarios[type](() => state.current, actions, payload)
-            },
+            scripts[type] = (payload: any) => scenarios[type](() => state.current, actions, payload),
             scripts
           ), {} as TScripts
         // eslint-disable-next-line
