@@ -7,7 +7,8 @@ import {
   createDatanomy, 
   useDatanomy, 
   TReducers, 
-  TScenarios 
+  TScenarios,
+  TBulkScenarios
 } from "../src";
 
 interface TTestStore {
@@ -27,7 +28,14 @@ const reducers:TReducers<TTestStore> = {
 }
 
 // TODO: test scenarios
-const scenarios: TScenarios<TTestStore> = (getState, actiond) => ({
+const scenarios: TScenarios<TTestStore> = {
+  asyncScript: async (getState, actiond) => {
+    await new Promise(ok => setTimeout(ok, 1000))
+  }
+}
+
+// TODO: test bulk scenarios
+const bulkScenarios: TBulkScenarios<TTestStore> = (getState, actiond) => ({
   asyncScript: async () => {
     await new Promise(ok => setTimeout(ok, 1000))
   }
