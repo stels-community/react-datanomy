@@ -78,11 +78,10 @@ export function createDatanomy<TState>(
 
   const { Provider } = context;
   
-  const DatanomyProvider: FC<IProviderProps> = ({children}) => (
-    <Provider value={useDatanomy<TState>(initialState, reducers, scenarios)}>
-        {children}
-    </Provider>
-  );
+  const DatanomyProvider: FC<IProviderProps> = ({children}) => {
+    const context = useDatanomy<TState>(initialState, reducers, scenarios)
+    return <Provider value={context}>{children}</Provider>
+  };
   
   const useHook: () => TDatanomyContext<TState> = () => useContext(context);
   

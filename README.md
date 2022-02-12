@@ -10,7 +10,7 @@ This is most clear way for manage state in React.js, with unnecessary of writing
 
 #### Preferencies:
 
-1. Super small: 998 bytes ungzipped!
+1. Super small: 929 bytes ungzipped!
 2. Support both, class and functional components
 3. Provide uniform bus, used universally throught all you components tree
 4. Without side dependencies - only React enough
@@ -27,29 +27,28 @@ yarn add react-datanomy
 ```
 ## API:
 
-Datanomy receive **initialState**, **reducers** and optionally **scenarios** and returns array with **StoreProvider**, **StoreHook** and **StoreContext**. **StoreProvider** supply universal structure, named **SAS Bus**, and then **StoreHook**, **StoreContext.Consumer**, or **contextType** via **StoreContext**, consume it in the next unified form:
+Datanomy receive **initialState**, **reducers** and optionally **scenarios** and returns array with **StoreProvider**, **StoreHook** and **StoreContext**. **StoreProvider** supply universal structure, named **SAS Bus**, or just a **Context**.
+Then **StoreHook**, **StoreContext.Consumer**, or **contextType**, consume it via **StoreContext** in the next unified form:
 
 ```js
 [currentState, memoizedActions, memoizedScripts]
 ```
 
-**SAS Bus** (**SAS** from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, etc. - to the any network, which independend from others and also paved through whole building. According to that analogy, React context play a cable duct role.
+**SAS Bus** (**SAS** from [**S**tate, **A**ctions, **S**cripts]) acts as data bus in the electronic, or like building infrastructere, where independend from architecture complexity, each room can be connected to electricity, water, internet, security system, gas, etc. - to the any network, which independend from others and also paved through whole building. According to that analogy, React context play a cable duct role for tree networks: state, actions and scripts, which present everywhere inside child tree of they store provider
 
 **initialState** is a starting store state.
 
 **reducers** is a hash of clear functions, indexed by actions names, which receives one or two arguments: **currentState** and optional **payload** and returns **newState**.
 
-**scenarios** is a hash of functions, which are receive **getState** method, **actions** and **payload** in arguments. That hash transforms to the hash of **scripts**, each from which receive only **payload** when called.
+**scenarios** is a hash of functions, which are receive **getContext** and **payload** in arguments. That hash transforms to the hash of **scripts**, each from which receive only **payload** when called.
 
-**bulk scenarios** is a function, which receive **getState** method and **actions** in arguments and returns a hash with **scripts**.
-
-**getState** is a function, which allways return cureent actual state inside **scripts**
+**getContext** is a function, which always returns current actual **SAS Bus** state in a form `[currentState, actions, scripts]`
 
 **currentState** is an current actual state, returned from useReducer inside **Datanomy**.
 
-**acrions** is a memoized hash of methods, which formally wrappers for **dispatch**, returned from useReducer, called with action name in `type` field and optional **payload** from **action** argument.
+**actions** is a memoized hash of methods, which formally wrappers for **dispatch**, returned from useReducer, called with action name in `type` field and optional **payload** from **action** argument.
 
-**scripts** is a  memoized hash of methods, which can receives optional **payload** and returns nothing. They are can be regular, or async functions, and contains a logic of any complexity, which allways have an access to the current actual state by using **getState**, and call any **actions**, which are closured from **scenarios** method scope.
+**scripts** is a memoized hash of methods, which are can receives optional **payload** and returns nothing. They are can be regular, or async functions, and contains a logic of any complexity, which allways have an access to the current actual context using **getContext**, which accessible in a **scenarios** declaration, but hidden in a scenarios usage.
 
 **StoreProvider** is component, which wrap React Context.Provider and supply SAS Bus to his value argument
 
@@ -83,32 +82,31 @@ const reducers = {
 
 // Optionally declare some complex scenarios...
 const scenarios = {
-  derivedAdd: async (getState, actions, payload) => {
-    console.log(getState().counter) // for example 10
-    await new Promise((resolve) => {
-      setTimeout(() => resolve(acttions.add(payload)), 100)
-    })
-    console.log(getState().counter) // 10 + payload
+  derivedAdd: async (getContext, payload) => {
+    logCounter(getContext) // for example 10
+    const [,{add}] = getContext()
+    await new Promise((resolve) => { setTimeout(() => resolve(add(payload)), 100) })
+    logCounter(getContext) // 10 + payload
   }
 }
 
-// ...or declare bulk scenarios
-// const bulkScenarios = (getState, actions) => ({
-//   derivedAdd: async (payload) => {
-//     console.log(getState().counter) // for example 10
-//     await new Promise((resolve) => {
-//       setTimeout(() => resolve(acttions.add(payload)), 100)
-//     })
-//     console.log(getState().counter) // 10 + payload
-//   },
-// })
+// some context data can be required several times during scenario will run, 
+// so, that cases looks like will better isolate in separate function scope,
+// like logCounter, which twice called for show actual counter state.
+// other approach (I not sure, that right, but, ...), using var instead const/let
+// with var we can redefine variable multiple times and we are becomes to able 
+// for reuse destructurization and retake newest state element value, action, or script
+const logCounter = getContext => {
+  const [{counter}] = getContext()
+  console.log("counter:", counter)
+}
 
 // Call createDatanomy with above declarations and export it retuns:
 export const [ 
   CounterProvider, 
   useCounter,
   CounterContext
-] = createDatanomy(initialState, reducers, scenarios /*or bulkScenarios*/)
+] = createDatanomy(initialState, reducers, scenarios)
 ```
 
 #### Same, using typescript:
@@ -139,32 +137,24 @@ const reducers: TReducers<TCounterStore> = {
 
 // Type scenarios, using TScenarios with store interface as generic argument...
 const scenarios: TScenarios<TCounterStore> = {
-  derivedAdd: async (getState, actions, payload) => {
-    console.log(getState().counter) // for example 10
-    await new Promise((resolve) => {
-      setTimeout(() => resolve(acttions.add(payload)), 100)
-    })
-    console.log(getState().counter) // 10 + payload
+  derivedAdd: async (getContext, payload) => {
+    logCounter(getContext) // for example 10
+    const [,{add}] = getContext()
+    await new Promise((resolve) => { setTimeout(() => resolve(add(payload)), 100) })
+    logCounter(getContext) // 10 + payload
   },
 };
 
-// ...or declare bulk scenarios
-// const bulkScenarios: TBulkScenarios<TCounterStore> = (getState, actions) => ({
-//   derivedAdd: async (payload) => {
-//     console.log(getState().counter) // for example 10
-//     await new Promise((resolve) => {
-//       setTimeout(() => resolve(acttions.add(payload)), 100)
-//     })
-//     console.log(getState().counter) // 10 + payload
-//   },
-// });
+const logCounter = getContext => {
+  const [{counter}] = getContext()
+  console.log("counter:", counter)
+}
 
 export const [ 
   CounterProvider, 
   useCounter,
   CounterContext
-// Probide store interface as generic argument to the createDatanomy
-] = createDatanomy<TCounterStore>(initialState, reducers, scenarios /*or bulkScenarios*/)
+] = createDatanomy<TCounterStore>(initialState, reducers, scenarios)
 ```
 
 ### 2. Import and connect You store provider to the DOM branch, or whole app

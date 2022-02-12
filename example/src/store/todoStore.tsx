@@ -1,4 +1,4 @@
-import { createDatanomy, TReducers, TScenarios } from "../../../src"
+import { createDatanomy, TReducers, TScenarios } from "react-datanomy";
 
 export type TTodo = {
   id: string;
@@ -50,15 +50,15 @@ const reducers: TReducers<TState> = {
 }
 
 
-const logCounter = ([{ counter }]: Array<{counter?: number}>) => console.log(counter)
+const logCounter = (getContext: Function) => console.log(getContext()[0].counter)
 
 const scenarios: TScenarios<TState> =  { 
-  loadTodos: async (getContext) => {
+  loadTodos: async (getContext: Function) => {
     const [,{
       addTodo, delTodo, setLoading
     }] = getContext()
 
-    logCounter(getContext())
+    logCounter(getContext)
     
     setLoading(true)
     
@@ -72,7 +72,7 @@ const scenarios: TScenarios<TState> =  {
 
     setLoading(false)
     
-    logCounter(getContext())
+    logCounter(getContext)
     
   },
 
