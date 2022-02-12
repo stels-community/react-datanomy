@@ -11,9 +11,9 @@ createServer({
     this.get("/api/todos", () => {
       let todos = localStorage.getItem('todos')
       return todos !== null ? JSON.parse(todos) : [
-        { id: "1", text: "Integrate datanomy", complete: false },
-        { id: "2", text: "Rethink app state concept", complete: false },
-        { id: "3", text: "Apply Occam's razor to code", complete: false },
+        { id: "1", text: "Open developer tools", complete: false },
+        { id: "2", text: "Refresh a page and change counter while todos loading", complete: false },
+        { id: "3", text: "Keep smile and manage state simple ;)", complete: false },
       ]
     }, { timing: 5000 })
 
