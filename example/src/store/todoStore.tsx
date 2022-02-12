@@ -1,4 +1,4 @@
-import { createDatanomy, TReducers, TScenarios } from "react-datanomy"
+import { createDatanomy, TReducers, TScenarios } from "../../../src"
 
 export type TTodo = {
   id: string;
@@ -49,46 +49,51 @@ const reducers: TReducers<TState> = {
   }),
 }
 
-const scenarios: TScenarios<TState> = (getState, actions) => {
-  
-  const { addTodo, delTodo, setLoading, setSaving } = actions;
 
-  const logCounter = () => console.log(getState().counter)
+const logCounter = ([{ counter }]: Array<{counter?: number}>) => console.log(counter)
 
-  return { 
+const scenarios: TScenarios<TState> =  { 
+  loadTodos: async (getContext) => {
+    const [,{
+      addTodo, delTodo, setLoading
+    }] = getContext()
 
-    loadTodos: async () => {
-      logCounter()
+    logCounter(getContext())
+    
+    setLoading(true)
+    
+    const response = await fetch('/api/todos')
+    const todos = await response.json()
+    
+    todos.forEach((todo: TTodo) => {
+      delTodo(todo)
+      addTodo(todo)
+    });
 
-      setLoading(true)
-      const response = await fetch('/api/todos')
-      const todos = await response.json()
-      
-      todos.forEach((todo: TTodo) => {
-        delTodo(todo)
-        addTodo(todo)
-      });
-      setLoading(false)
+    setLoading(false)
+    
+    logCounter(getContext())
+    
+  },
 
-      logCounter()
-    },
+  saveTodos: async (getContext, todos = null) => {
+    var [ state, {
+      setSaving
+    }] = getContext()
+    const data = todos !== null ? todos : state.todos
 
-    saveTodos: async (todos = null) => {
-      const data = todos !== null ? todos : getState().todos
+    setSaving(true);
+    let response = await fetch('/api/todos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json;charset=utf-8' },
+      body: JSON.stringify(data)
+    });
+    
+    let result = await response.json();
+    setSaving(false);
 
-      setSaving(true);
-      let response = await fetch('/api/todos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json;charset=utf-8' },
-        body: JSON.stringify(data)
-      });
-      
-      let result = await response.json();
-      setSaving(false);
-
-      console.log(result);
-    },
-  }
+    console.log(result);
+  },
 }
 
 export const [ 

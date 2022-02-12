@@ -22,15 +22,13 @@ export type TReducers<TState> = {
 };
 
 export type TScenarios<TState> = {
-  [script: string]: (getState: () => TState, actions: TActions, payload: any) => void | Promise<void>;
+  [script: string]: (getContext: () => TDatanomyContext<TState>, payload: any) => void | Promise<void>;
 }
-
-export type TBulkScenarios<TState> = (getState: () => TState, actions: TActions) => TScripts;
 
 export function useDatanomy<TState>(
   initialState: TState, 
   reducers: TReducers<TState>, 
-  scenarios?: TScenarios<TState> | TBulkScenarios<TState>
+  scenarios?: TScenarios<TState>
 ): [TState, TActions, TScripts] {
   
   const reducer = (
@@ -53,17 +51,16 @@ export function useDatanomy<TState>(
   
   const scripts: TScripts = !scenarios 
     ? {}
-    : typeof scenarios === 'object'
-      ? useMemo(() => Object.keys(scenarios).reduce(
-          (scripts: TScripts, type): TScripts => (
-            scripts[type] = (payload: any) => scenarios[type](() => state.current, actions, payload),
-            scripts
-          ), {} as TScripts
-        // eslint-disable-next-line
-        ), [])
-      : useMemo(() => (scenarios as TBulkScenarios<TState>)(
-        () => state.current, actions), []
-      )
+    : useMemo(() => Object.keys(scenarios).reduce(
+        (scripts: TScripts, type): TScripts => (
+          scripts[type] = (payload: any) => scenarios[type]( 
+            () => [state.current, actions, scripts], 
+            payload 
+          ),
+          scripts 
+        ), {} as TScripts
+      // eslint-disable-next-line
+      ), [])
   
   return [store, actions, scripts];
 };
@@ -71,7 +68,7 @@ export function useDatanomy<TState>(
 export function createDatanomy<TState>(
   initialState: TState, 
   reducers: TReducers<TState>, 
-  scenarios?: TScenarios<TState> | TBulkScenarios<TState>
+  scenarios?: TScenarios<TState> 
 ): [
   FC<IProviderProps>,
   () => TDatanomyContext<TState>,
