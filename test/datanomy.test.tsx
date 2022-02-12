@@ -9,7 +9,7 @@ import {
   useDatanomy, 
   TReducers, 
   TScenarios,
-  TBulkScenarios
+  TDatanomyContext
 } from "../src";
 
 configure({ adapter: new Adapter() });
@@ -32,21 +32,15 @@ const reducers:TReducers<TTestStore> = {
 
 // TODO: test scenarios
 const scenarios: TScenarios<TTestStore> = {
-  asyncScript: async (getState, actions) => {
-    expect(typeof getState() === 'object').toBe(true)
+  asyncScript: async (getContext) => {
     await new Promise(ok => setTimeout(ok, 1000))
-    expect(typeof actions === 'object').toBe(true)
+    expect(getContext() instanceof Array).toBe(true)
+    expect(getContext().length).toBe(3)
+    expect(typeof getContext()[0]).toBe('object')
+    expect(typeof getContext()[1]).toBe('object')
+    expect(typeof getContext()[2]).toBe('object')
   }
 }
-
-// TODO: test bulk scenarios
-const bulkScenarios: TBulkScenarios<TTestStore> = (getState, actions) => ({
-  asyncScript: async () => {
-    expect(typeof getState() === 'object').toBe(true)
-    await new Promise(ok => setTimeout(ok, 1000))
-    expect(typeof actions === 'object').toBe(true)
-  }
-})
 
 describe("Datanomy itself", () => {
 
@@ -55,25 +49,6 @@ describe("Datanomy itself", () => {
     const Wrapper: FC = () => {
       // TODO: test scripts 
       const [store, actions, /* scripts */] = useDatanomy(initialState, reducers, scenarios)
-      return (
-        <div data-testid="component" onClick={actions.change1}>{store.data1}</div>
-      )
-    }
-
-    const component = mount(<Wrapper/>)
-    
-    expect(component.find('[data-testid="component"]').text()).toBe("0")
-    component.find('[data-testid="component"]').simulate("click")
-    component.update()
-    expect(component.find('[data-testid="component"]').text()).toBe("1")
-
-  })
-
-  it("should correctly change store (bulk scenarios used)", () => {
-
-    const Wrapper: FC = () => {
-      // TODO: test scripts 
-      const [store, actions, /* scripts */] = useDatanomy(initialState, reducers, bulkScenarios)
       return (
         <div data-testid="component" onClick={actions.change1}>{store.data1}</div>
       )
