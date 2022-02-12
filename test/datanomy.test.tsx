@@ -8,8 +8,7 @@ import {
   createDatanomy, 
   useDatanomy, 
   TReducers, 
-  TScenarios,
-  TDatanomyContext
+  TScenarios
 } from "../src";
 
 configure({ adapter: new Adapter() });
